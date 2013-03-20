@@ -49,11 +49,11 @@
         {{ext.name}}
         <span class="item_actions">
          <a href="#" class="details" title="{{ext.package_name}}">{% trans "Details" %}</a> | 
-{%       if not ext.installed %}        
+{%       if not ext.installed %}
           <a href="#" class="install" title="{{ext.package_name}}" id="action_install_{{id}}">{% trans "Install" %}</a>
 {%       else %}
           <span class="item_installed">{% trans "Installed" %}</span>
-{%       endif %}        
+{%       endif %}
         </span>
        </div>
        <div class="item_version">{{ext.version}}</div>

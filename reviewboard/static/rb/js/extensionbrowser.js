@@ -18,7 +18,7 @@ function show_details(package_name, open_install_tab){
             modalBoxView.render(open_install_tab);
         },
         error: function(model, text, statusText){
-            // QUESTION: How to handle this?
+            // XXX: How to handle this?
             alert(text);
         }
     });

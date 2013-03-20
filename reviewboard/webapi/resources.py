@@ -7265,7 +7265,7 @@ class ExtensionInstall(WebAPIResource):
                 }
             }
         except Exception, e:
-            # QUESTION: What kind of error goes here?
+            # XXX: What kind of error goes here?
             pass
 
         return 201, {}

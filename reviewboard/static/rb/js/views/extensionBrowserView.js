@@ -81,7 +81,7 @@ InfoView = Backbone.View.extend({
                 alert('done');
             },
             error: function(model, text, statusText){
-                // QUESTION: How to handle this?
+                // XXX: How to handle this?
             }
         });
     },

@@ -62,12 +62,12 @@ class ExtensionStoreQuery(object):
 
         for ext in extensions:
             installed = ext['package_name'] in self.installed_extensions
-            extlist.append(StoreExtensionInfo(id=ext['id'], 
-                                            name=ext['name'], 
-                                            description=ext['description'], 
-                                            version=ext['version'], 
+            extlist.append(StoreExtensionInfo(id=ext['id'],
+                                            name=ext['name'],
+                                            description=ext['description'],
+                                            version=ext['version'],
                                             author=ext['author'],
-                                            package=ext['package_name'], 
+                                            package=ext['package_name'],
                                             installed=installed))
 
         return extlist
