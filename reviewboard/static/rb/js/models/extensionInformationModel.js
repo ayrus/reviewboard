@@ -16,7 +16,7 @@ ExtensionInfo = RB.BaseResource.extend({
     }, RB.BaseResource.prototype.defaults),
 
     url: function() {
-        return '../../api/extensionbrowser/extensions/' + this.id + '/';
+        return '../../../api/extensionbrowser/extensions/' + this.id + '/';
     },
 
     parse: function(rsp) {
@@ -49,7 +49,7 @@ ExtensionInstallInfo = RB.BaseResource.extend({
     }, RB.BaseResource.prototype.defaults),
 
     url: function(){
-        return '../../api/extensionbrowser/install/';
+        return '../../../api/extensionbrowser/install/';
     },
 
     toJSON: function(){
