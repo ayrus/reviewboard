@@ -30,7 +30,8 @@ from djblets.webapi.decorators import webapi_login_required, \
                                       webapi_response_errors, \
                                       webapi_request_fields
 from djblets.webapi.errors import DOES_NOT_EXIST, INVALID_FORM_DATA, \
-                                  NOT_LOGGED_IN, PERMISSION_DENIED
+                                  NOT_LOGGED_IN, PERMISSION_DENIED, \
+                                  EXTENSION_INSTALLED
 from djblets.webapi.resources import WebAPIResource as DjbletsWebAPIResource, \
                                      UserResource as DjbletsUserResource, \
                                      RootResource as DjbletsRootResource, \
@@ -47,6 +48,7 @@ from reviewboard.diffviewer.diffutils import get_diff_files, \
                                              get_patched_file, \
                                              populate_diff_chunks
 from reviewboard.diffviewer.forms import EmptyDiffError, DiffTooBigError
+from reviewboard.extensionbrowser.base import ExtensionStoreQuery
 from reviewboard.extensions.base import get_extension_manager
 from reviewboard.hostingsvcs.errors import AuthorizationError
 from reviewboard.hostingsvcs.models import HostingServiceAccount
@@ -7203,6 +7205,86 @@ class ServerInfoResource(WebAPIResource):
 
 server_info_resource = ServerInfoResource()
 
+class ExtensionInfo(WebAPIResource):
+
+    name = "extension"
+    uri_object_key = "package_name"
+    uri_object_key_regex = '[A-Za-z0-9_-]+'
+
+    @webapi_login_required
+    @webapi_response_errors(DOES_NOT_EXIST)
+    def get(self, request, *args, **kwargs):
+
+        store = ExtensionStoreQuery(get_extension_manager())
+        data = store.get_extension_info(kwargs["package_name"])
+        if "error" in data:
+            return DOES_NOT_EXIST
+
+        data["links"] = self.get_links(request=request, *args, **kwargs)
+
+        return 200, {self.name: data}
+
+extension_info = ExtensionInfo()
+
+
+class ExtensionInstall(WebAPIResource):
+
+    name = "install"
+    singleton = True
+
+    allowed_methods = ('POST')
+
+    @webapi_login_required
+    @webapi_response_errors(EXTENSION_INSTALLED, INVALID_FORM_DATA)
+    @webapi_request_fields(required={
+        'install_url': {
+            'type': str,
+            'description': 'URL to the archive containting an egg to install.',
+        },
+        'package_name': {
+            'type': str,
+            'description': 'Package name of the extension.'
+        }
+    })
+    def create(self, request, package_name, install_url, *args, **kwargs):
+
+        installed_extensions = [
+                    ext.dist.project_name.lower()
+                    for ext in get_extension_manager()._entrypoint_iterator()
+                ]
+
+        if package_name in installed_extensions:
+            return EXTENSION_INSTALLED
+
+        try:
+            get_extension_manager().install_extension(install_url, package_name)
+        except DistributionNotFound:
+            return INVALID_FORM_DATA, {
+                'fields': {
+                    'package_name': ['Package name does not match resource'],
+                }
+            }
+        except Exception, e:
+            # QUESTION: What kind of error goes here?
+            pass
+
+        return 201, {}
+
+extension_install = ExtensionInstall()
+
+
+class ExtensionBrowser(WebAPIResource):
+
+    name = "extensionbrowser"
+    singleton = True
+
+    list_child_resources = [
+        extension_info,
+        extension_install,
+    ]
+
+extension_browser = ExtensionBrowser()
+
 
 class SessionResource(WebAPIResource):
     """Information on the active user's session.
@@ -7278,6 +7360,7 @@ class RootResource(DjbletsRootResource):
     def __init__(self, *args, **kwargs):
         super(RootResource, self).__init__([
             default_reviewer_resource,
+            extension_browser,
             extension_resource,
             hosting_service_account_resource,
             repository_resource,

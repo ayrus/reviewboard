@@ -105,6 +105,8 @@ ROOT_URLCONF = 'djblets.util.rooturl'
 
 REVIEWBOARD_ROOT = os.path.abspath(os.path.split(__file__)[0])
 
+EXTENSION_STORE_ENDPOINT = "http://andromeda.ayrus.net"
+
 # where is the site on your server ? - add the trailing slash.
 SITE_ROOT = '/'
 
@@ -150,6 +152,7 @@ RB_BUILTIN_APPS = [
     'reviewboard.changedescs',
     'reviewboard.diffviewer',
     'reviewboard.extensions',
+    'reviewboard.extensionbrowser',
     'reviewboard.hostingsvcs',
     'reviewboard.notifications',
     'reviewboard.reviews',
@@ -327,6 +330,14 @@ PIPELINE_JS = {
         ),
         'output_filename': 'rb/js/base.min.js',
     },
+    'extensionbrowser': {
+        'source_filenames': (
+            'rb/js/models/extensionInformationModel.js',
+            'rb/js/views/extensionBrowserView.js',
+            'rb/js/extensionbrowser.js',
+        ),
+        'output_filename': 'rb/js/extensionbrowser.min.js',
+    },
     'reviews': {
         'source_filenames': (
             # Note: These are roughly in dependency order.
@@ -382,6 +393,14 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'rb/css/common.min.css',
         'absolute_paths': False,
+    },
+    'extensionbrowser': {
+        'source_filenames': (
+            'djblets/css/admin.css',
+            'rb/css/extensionbrowser.css',
+            'rb/css/jquery-ui-1.10.1.custom.css',
+        ),
+        'output_filename': 'rb/css/extensionbrowser.min.css'
     },
     'js-tests': {
         'source_filenames': (

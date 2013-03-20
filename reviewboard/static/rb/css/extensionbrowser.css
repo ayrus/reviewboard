@@ -1,0 +1,113 @@
+#results_container{
+	margin: 0 auto;
+	width: 1400px;
+}
+
+#results{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#results li.header div{
+	background-color: #C6DCF3;
+	font-weight: bold;
+	height: 20px;
+}
+
+#results li div{
+	display: block;
+	float: left;
+	border-bottom: 1px solid #888A85;
+	border-right: 1px solid #888A85;
+	padding: 3px 5px;
+	height: 30px;
+}
+
+.item_start{
+	border-left: 1px solid #888A85;
+}
+
+.clear{
+	clear: both;
+}
+
+.item_name, .item_version, .item_author{
+	width: 200px;
+}
+
+.item_description{
+	width: 750px;
+}
+
+.item_actions{
+	display: block;
+	margin-top: 5px;
+}
+
+.item_installed{
+	color: #999999;
+}
+
+.extension_info_wrapper{
+	margin: 0;
+	width: 600px;
+}
+
+.extension_info_wrapper label{
+	font-weight: bold;
+}
+
+.extension_info_wrapper li a:link, .extension_info_wrapper li a:visited{
+	color: #999999;
+}
+
+.extension_info_wrapper li a:hover{
+	text-decoration: underline;
+}
+
+.extension_info_main{
+	float: left;
+}
+
+.extension_text{
+	text-align: justify;
+	width: 400px;
+	margin-left: 15px;
+	margin-bottom: 15px;
+}
+
+.extension_info_sidebar{
+	float: left;
+	width: 150px;
+	padding-left: 10px;
+	margin-left: 10px;
+	border-left: 1px solid #888A85;
+}
+
+.extension_info_sidebar div{
+	margin-bottom: 15px;
+}
+
+.extension_screenshots{
+	text-align: center;
+	max-height: 600px;
+	overflow: auto;
+}
+
+.extension_screenshot_img{
+	width: 250px;
+	height: 250px;
+}
+
+.extensions_modalbox{
+	width: 700px;
+}
+
+.extension_title{
+	text-align: center;
+	font-weight: bold;
+	font-size: 15px;
+	display: block;
+	margin-bottom: 15px;
+}

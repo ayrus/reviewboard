@@ -26,6 +26,8 @@ if not admin.site._registry:
 urlpatterns = patterns('',
     (r'^admin/extensions/', include('djblets.extensions.urls'),
      {'extension_manager': extension_manager}),
+    (r'^admin/extensions/browse/', 
+        include('reviewboard.extensionbrowser.urls')),
     (r'^admin/', include('reviewboard.admin.urls')),
 )
 

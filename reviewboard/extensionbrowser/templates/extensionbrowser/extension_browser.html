@@ -1,0 +1,72 @@
+{% extends "admin/base_site.html" %}
+{% load adminmedia admin_list compressed djblets_extensions i18n staticfiles %}
+
+{% block title %}{% trans "Browse Extensions" %} {{block.super}}{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
+{% compressed_css "extensionbrowser" %}
+
+{{block.super}}
+{% endblock %}
+
+{% block bodyclass %}{{block.super}} change-form{% endblock %}
+
+{% block content %}
+<h1 class="title">{% trans "Browse Extensions" %}</h1>
+<div id="content-main">
+ <form action="{% url extensionbrowser %}" method="post">
+  <fieldset class="module aligned wide">
+   <h2>Search</h2>
+    <div class="form-row search-query{% if form.query.errors %} error{% endif %}" id="row-query">
+     {{form.query.errors}}
+     <label for="id_query" class="required">{{form.query.label}}</label>
+     {{form.query}}
+     <p class="help">
+      {% trans "Enter some search keywords." %}
+     </p>
+   </div>
+
+   <div class="submit-row">
+    <input type="submit" value="{% trans "Search" %}" class="default" />
+    <div class="clear"></div>
+   </div>
+  </fieldset>
+ </form>
+{% if results %}
+  <div id="results_container">
+   <h2>{% trans "Search Results" %}</h2>
+   <ul id="results">
+    <li id="results_header" class="header clear">
+     <div class="item_name item_start">{% trans "Extension Name" %}</div>
+     <div class="item_version">{% trans "Version" %}</div>
+     <div class="item_author">{% trans "Author" %}</div>
+     <div class="item_description">{% trans "Description" %}</div>
+    </li>
+{%  for ext in results %}
+     <li class="clear">
+       <div class="item_name item_start">
+        {{ext.name}}
+        <span class="item_actions">
+         <a href="#" class="details" title="{{ext.package_name}}">{% trans "Details" %}</a> | 
+{%       if not ext.installed %}        
+          <a href="#" class="install" title="{{ext.package_name}}" id="action_install_{{id}}">{% trans "Install" %}</a>
+{%       else %}
+          <span class="item_installed">{% trans "Installed" %}</span>
+{%       endif %}        
+        </span>
+       </div>
+       <div class="item_version">{{ext.version}}</div>
+       <div class="item_author">{{ext.author}}</div>
+       <div class="item_description">{{ ext.description|truncatechars:258 }}</div>
+     </li>
+{%  endfor %}
+   </ul>
+  </div>
+{% endif %}
+
+</div>
+{% endblock %}
+{% block scripts-post %}
+{% compressed_js "extensionbrowser" %}
+{% endblock %}
